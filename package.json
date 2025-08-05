@@ -39,6 +39,6 @@
     "typescript": "^5"
   },
   "eslintIgnore": [
-    "app/generated/prisma"
+    "generated/prisma"
   ]
 }

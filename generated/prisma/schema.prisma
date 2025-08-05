@@ -1,8 +1,9 @@
 // prisma/schema.prisma
 
+// schema.prisma
 generator client {
   provider = "prisma-client-js"
-  output   = "../app/generated/prisma"
+  output   = "../generated/prisma"
 }
 
 datasource db {
