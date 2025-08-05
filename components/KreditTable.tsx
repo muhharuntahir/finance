@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { DateRange, Range } from "react-date-range";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
@@ -9,6 +9,7 @@ import { Button } from "./ui/button";
 import { toRupiah, hitungHari, bungaHarian } from "@/lib/utils";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
+import "@/styles/date-range-custom.css"; // opsional: custom styling
 
 type Kredit = {
   id: string;
@@ -21,6 +22,8 @@ export default function KreditTable() {
   const [data, setData] = useState<Kredit[]>([]);
   const [refreshKey, setRefreshKey] = useState(0);
   const [showCalendar, setShowCalendar] = useState(false);
+
+  const calendarRef = useRef<HTMLDivElement | null>(null);
 
   const refresh = () => setRefreshKey((k) => k + 1);
 
@@ -41,10 +44,30 @@ export default function KreditTable() {
   const start = range[0].startDate;
   const end = range[0].endDate;
 
+  // Click outside handler for calendar
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        calendarRef.current &&
+        !calendarRef.current.contains(event.target as Node)
+      ) {
+        setShowCalendar(false);
+      }
+    }
+
+    if (showCalendar) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showCalendar]);
+
   const filtered = data.filter((item) => {
     const tgl = new Date(item.tanggalPengambilan);
     if (!start || !end) return true;
-    return tgl >= (start as Date) && tgl <= (end as Date);
+    return tgl >= start && tgl <= end;
   });
 
   const rows = filtered.sort(
@@ -78,14 +101,13 @@ export default function KreditTable() {
 
   return (
     <>
-      {/* Top Right Controls */}
-      <div className="flex justify-end mb-4 gap-4">
-        <div className="flex flex-col items-end gap-2 relative">
-          {/* Button + Calendar Popover */}
+      {/* Filter Controls */}
+      <div className="flex justify-end mb-4 gap-4 relative">
+        <div className="flex flex-row items-end gap-2">
           <div className="relative inline-block">
             <Button
               variant="outline"
-              onClick={() => setShowCalendar(!showCalendar)}
+              onClick={() => setShowCalendar((prev) => !prev)}
             >
               {start && end
                 ? `${format(start, "dd MMM yyyy", { locale: id })} - ${format(
@@ -96,11 +118,14 @@ export default function KreditTable() {
                 : "Filter Tanggal"}
             </Button>
 
-            {showCalendar && (
-              <div className="absolute right-0 mt-2 z-50 shadow-lg border rounded-md bg-white">
+            {showCalendar ? (
+              <div
+                ref={calendarRef}
+                className="absolute right-0 mt-2 z-50 bg-white rounded-lg shadow-lg border p-4"
+              >
                 <DateRange
                   className="bg-white"
-                  editableDateInputs={true}
+                  editableDateInputs
                   onChange={(item) => setRange([item.selection])}
                   moveRangeOnFirstSelection={false}
                   ranges={range}
@@ -109,10 +134,9 @@ export default function KreditTable() {
                   locale={id}
                 />
               </div>
-            )}
+            ) : null}
           </div>
 
-          {/* Reset Filter */}
           <Button
             className="text-sm text-red-700 bg-red-200 hover:bg-red-300 dark:bg-red-600 dark:hover:bg-red-500"
             variant="secondary"

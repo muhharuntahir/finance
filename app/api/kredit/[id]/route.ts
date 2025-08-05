@@ -1,28 +1,30 @@
-import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
+// app/api/kredit/[id]/route.ts
 
-const prisma = new PrismaClient();
+import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
 
-export async function PUT(
-  req: Request,
-  { params }: { params: { id: string } }
-) {
-  const { tanggalPengembalian } = await req.json();
-  const updated = await prisma.kredit.update({
-    where: { id: params.id },
-    data: {
-      tanggalPengembalian: new Date(tanggalPengembalian),
-    },
-  });
-  return NextResponse.json(updated);
-}
+export async function PUT(request: NextRequest) {
+  const id = request.nextUrl.pathname.split("/").pop();
+  if (!id) {
+    return NextResponse.json({ error: "Missing ID in URL" }, { status: 400 });
+  }
 
-export async function DELETE(
-  _: Request,
-  { params }: { params: { id: string } }
-) {
-  await prisma.kredit.delete({
-    where: { id: params.id },
-  });
-  return NextResponse.json({ success: true });
+  try {
+    const body = await request.json();
+
+    const updated = await prisma.kredit.update({
+      where: { id },
+      data: {
+        amount: body.amount,
+        tanggalPengembalian: body.tanggalPengembalian
+          ? new Date(body.tanggalPengembalian)
+          : null,
+      },
+    });
+
+    return NextResponse.json(updated);
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ error: "Update failed" }, { status: 500 });
+  }
 }

@@ -70,7 +70,7 @@ export default function KreditForm({ onAdded }: Props) {
       </Popover>
 
       <Button
-        className="bg-green-900 hover:bg-green-700 text-white w-full sm:w-auto"
+        className="bg-blue-800 hover:bg-blue-600 text-white w-full sm:w-auto"
         onClick={handleAdd}
       >
         Tambah
