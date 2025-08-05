@@ -1,0 +1,17 @@
+generator client {
+  provider = "prisma-client-js"
+  // output baris ini boleh dihapus jika ingin pakai default
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Kredit {
+  id                  String    @id @default(cuid())
+  amount              Int
+  tanggalPengambilan  DateTime
+  tanggalPengembalian DateTime?
+  createdAt           DateTime  @default(now())
+}
