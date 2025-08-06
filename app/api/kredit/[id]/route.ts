@@ -1,8 +1,7 @@
-// app/api/kredit/[id]/route.ts
-
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
+// ✅ PUT: Update amount / tanggalPengembalian
 export async function PUT(request: NextRequest) {
   const id = request.nextUrl.pathname.split("/").pop();
   if (!id) {
@@ -15,24 +14,29 @@ export async function PUT(request: NextRequest) {
     const updated = await prisma.kredit.update({
       where: { id },
       data: {
-        amount: body.amount,
+        amount: BigInt(body.amount),
         tanggalPengembalian: body.tanggalPengembalian
           ? new Date(body.tanggalPengembalian)
           : null,
       },
     });
 
-    return NextResponse.json(updated);
+    return NextResponse.json({
+      ...updated,
+      amount: updated.amount.toString(),
+    });
   } catch (error) {
-    console.error(error);
-    return NextResponse.json({ error: "Update failed" }, { status: 500 });
+    console.error("PUT /api/kredit/[id] failed:", error);
+    return NextResponse.json(
+      { error: "Gagal mengupdate data" },
+      { status: 500 }
+    );
   }
 }
 
-// ✅ Tambahkan ini
+// ✅ DELETE: Hapus data kredit
 export async function DELETE(request: NextRequest) {
   const id = request.nextUrl.pathname.split("/").pop();
-
   if (!id) {
     return NextResponse.json({ error: "Missing ID in URL" }, { status: 400 });
   }
@@ -42,9 +46,18 @@ export async function DELETE(request: NextRequest) {
       where: { id },
     });
 
-    return NextResponse.json({ message: "Deleted", deleted });
+    return NextResponse.json({
+      message: "Berhasil dihapus",
+      deleted: {
+        ...deleted,
+        amount: deleted.amount.toString(),
+      },
+    });
   } catch (error) {
-    console.error(error);
-    return NextResponse.json({ error: "Delete failed" }, { status: 500 });
+    console.error("DELETE /api/kredit/[id] failed:", error);
+    return NextResponse.json(
+      { error: "Gagal menghapus data" },
+      { status: 500 }
+    );
   }
 }

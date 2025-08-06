@@ -13,7 +13,7 @@ datasource db {
 
 model Kredit {
   id                  String    @id @default(uuid())
-  amount              Int
+  amount              BigInt
   tanggalPengambilan  DateTime
   tanggalPengembalian DateTime?
   createdAt           DateTime  @default(now())

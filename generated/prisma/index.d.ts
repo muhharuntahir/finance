@@ -899,12 +899,12 @@ export namespace Prisma {
   }
 
   export type KreditSumAggregateOutputType = {
-    amount: number | null
+    amount: bigint | null
   }
 
   export type KreditMinAggregateOutputType = {
     id: string | null
-    amount: number | null
+    amount: bigint | null
     tanggalPengambilan: Date | null
     tanggalPengembalian: Date | null
     createdAt: Date | null
@@ -913,7 +913,7 @@ export namespace Prisma {
 
   export type KreditMaxAggregateOutputType = {
     id: string | null
-    amount: number | null
+    amount: bigint | null
     tanggalPengambilan: Date | null
     tanggalPengembalian: Date | null
     createdAt: Date | null
@@ -1055,7 +1055,7 @@ export namespace Prisma {
 
   export type KreditGroupByOutputType = {
     id: string
-    amount: number
+    amount: bigint
     tanggalPengambilan: Date
     tanggalPengembalian: Date | null
     createdAt: Date
@@ -1124,7 +1124,7 @@ export namespace Prisma {
     objects: {}
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      amount: number
+      amount: bigint
       tanggalPengambilan: Date
       tanggalPengembalian: Date | null
       createdAt: Date
@@ -1553,7 +1553,7 @@ export namespace Prisma {
    */
   interface KreditFieldRefs {
     readonly id: FieldRef<"Kredit", 'String'>
-    readonly amount: FieldRef<"Kredit", 'Int'>
+    readonly amount: FieldRef<"Kredit", 'BigInt'>
     readonly tanggalPengambilan: FieldRef<"Kredit", 'DateTime'>
     readonly tanggalPengembalian: FieldRef<"Kredit", 'DateTime'>
     readonly createdAt: FieldRef<"Kredit", 'DateTime'>
@@ -1994,16 +1994,16 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Int'
+   * Reference to a field of type 'BigInt'
    */
-  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+  export type BigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt'>
     
 
 
   /**
-   * Reference to a field of type 'Int[]'
+   * Reference to a field of type 'BigInt[]'
    */
-  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+  export type ListBigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt[]'>
     
 
 
@@ -2018,6 +2018,20 @@ export namespace Prisma {
    * Reference to a field of type 'DateTime[]'
    */
   export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Int'
+   */
+  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+  /**
+   * Reference to a field of type 'Int[]'
+   */
+  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
 
 
@@ -2043,7 +2057,7 @@ export namespace Prisma {
     OR?: KreditWhereInput[]
     NOT?: KreditWhereInput | KreditWhereInput[]
     id?: StringFilter<"Kredit"> | string
-    amount?: IntFilter<"Kredit"> | number
+    amount?: BigIntFilter<"Kredit"> | bigint | number
     tanggalPengambilan?: DateTimeFilter<"Kredit"> | Date | string
     tanggalPengembalian?: DateTimeNullableFilter<"Kredit"> | Date | string | null
     createdAt?: DateTimeFilter<"Kredit"> | Date | string
@@ -2064,7 +2078,7 @@ export namespace Prisma {
     AND?: KreditWhereInput | KreditWhereInput[]
     OR?: KreditWhereInput[]
     NOT?: KreditWhereInput | KreditWhereInput[]
-    amount?: IntFilter<"Kredit"> | number
+    amount?: BigIntFilter<"Kredit"> | bigint | number
     tanggalPengambilan?: DateTimeFilter<"Kredit"> | Date | string
     tanggalPengembalian?: DateTimeNullableFilter<"Kredit"> | Date | string | null
     createdAt?: DateTimeFilter<"Kredit"> | Date | string
@@ -2090,7 +2104,7 @@ export namespace Prisma {
     OR?: KreditScalarWhereWithAggregatesInput[]
     NOT?: KreditScalarWhereWithAggregatesInput | KreditScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Kredit"> | string
-    amount?: IntWithAggregatesFilter<"Kredit"> | number
+    amount?: BigIntWithAggregatesFilter<"Kredit"> | bigint | number
     tanggalPengambilan?: DateTimeWithAggregatesFilter<"Kredit"> | Date | string
     tanggalPengembalian?: DateTimeNullableWithAggregatesFilter<"Kredit"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Kredit"> | Date | string
@@ -2099,7 +2113,7 @@ export namespace Prisma {
 
   export type KreditCreateInput = {
     id?: string
-    amount: number
+    amount: bigint | number
     tanggalPengambilan: Date | string
     tanggalPengembalian?: Date | string | null
     createdAt?: Date | string
@@ -2108,7 +2122,7 @@ export namespace Prisma {
 
   export type KreditUncheckedCreateInput = {
     id?: string
-    amount: number
+    amount: bigint | number
     tanggalPengambilan: Date | string
     tanggalPengembalian?: Date | string | null
     createdAt?: Date | string
@@ -2117,7 +2131,7 @@ export namespace Prisma {
 
   export type KreditUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    amount?: IntFieldUpdateOperationsInput | number
+    amount?: BigIntFieldUpdateOperationsInput | bigint | number
     tanggalPengambilan?: DateTimeFieldUpdateOperationsInput | Date | string
     tanggalPengembalian?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -2126,7 +2140,7 @@ export namespace Prisma {
 
   export type KreditUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    amount?: IntFieldUpdateOperationsInput | number
+    amount?: BigIntFieldUpdateOperationsInput | bigint | number
     tanggalPengambilan?: DateTimeFieldUpdateOperationsInput | Date | string
     tanggalPengembalian?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -2135,7 +2149,7 @@ export namespace Prisma {
 
   export type KreditCreateManyInput = {
     id?: string
-    amount: number
+    amount: bigint | number
     tanggalPengambilan: Date | string
     tanggalPengembalian?: Date | string | null
     createdAt?: Date | string
@@ -2144,7 +2158,7 @@ export namespace Prisma {
 
   export type KreditUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    amount?: IntFieldUpdateOperationsInput | number
+    amount?: BigIntFieldUpdateOperationsInput | bigint | number
     tanggalPengambilan?: DateTimeFieldUpdateOperationsInput | Date | string
     tanggalPengembalian?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -2153,7 +2167,7 @@ export namespace Prisma {
 
   export type KreditUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    amount?: IntFieldUpdateOperationsInput | number
+    amount?: BigIntFieldUpdateOperationsInput | bigint | number
     tanggalPengambilan?: DateTimeFieldUpdateOperationsInput | Date | string
     tanggalPengembalian?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -2175,15 +2189,15 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
-  export type IntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
+  export type BigIntFilter<$PrismaModel = never> = {
+    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
+    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
+    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    not?: NestedBigIntFilter<$PrismaModel> | bigint | number
   }
 
   export type DateTimeFilter<$PrismaModel = never> = {
@@ -2266,20 +2280,20 @@ export namespace Prisma {
     _max?: NestedStringFilter<$PrismaModel>
   }
 
-  export type IntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+  export type BigIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
+    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
+    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    not?: NestedBigIntWithAggregatesFilter<$PrismaModel> | bigint | number
     _count?: NestedIntFilter<$PrismaModel>
     _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
+    _sum?: NestedBigIntFilter<$PrismaModel>
+    _min?: NestedBigIntFilter<$PrismaModel>
+    _max?: NestedBigIntFilter<$PrismaModel>
   }
 
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
@@ -2314,12 +2328,12 @@ export namespace Prisma {
     set?: string
   }
 
-  export type IntFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
+  export type BigIntFieldUpdateOperationsInput = {
+    set?: bigint | number
+    increment?: bigint | number
+    decrement?: bigint | number
+    multiply?: bigint | number
+    divide?: bigint | number
   }
 
   export type DateTimeFieldUpdateOperationsInput = {
@@ -2344,15 +2358,15 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
-  export type NestedIntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
+  export type NestedBigIntFilter<$PrismaModel = never> = {
+    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
+    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
+    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    not?: NestedBigIntFilter<$PrismaModel> | bigint | number
   }
 
   export type NestedDateTimeFilter<$PrismaModel = never> = {
@@ -2394,7 +2408,7 @@ export namespace Prisma {
     _max?: NestedStringFilter<$PrismaModel>
   }
 
-  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+  export type NestedIntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
     notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -2402,12 +2416,23 @@ export namespace Prisma {
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
+  export type NestedBigIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
+    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
+    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    not?: NestedBigIntWithAggregatesFilter<$PrismaModel> | bigint | number
     _count?: NestedIntFilter<$PrismaModel>
     _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
+    _sum?: NestedBigIntFilter<$PrismaModel>
+    _min?: NestedBigIntFilter<$PrismaModel>
+    _max?: NestedBigIntFilter<$PrismaModel>
   }
 
   export type NestedFloatFilter<$PrismaModel = never> = {

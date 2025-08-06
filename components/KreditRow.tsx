@@ -1,98 +1,142 @@
-// components/KreditRow.tsx
+"use client";
+
+import { useState } from "react";
 import { format } from "date-fns";
-import { cn, hitungHari, bungaHarian, toRupiah } from "@/lib/utils";
-import { Button } from "./ui/button";
-import { Popover, PopoverTrigger, PopoverContent } from "./ui/popover";
-import { Calendar } from "./ui/calendar";
-import { Trash } from "lucide-react";
+import { id } from "date-fns/locale";
+import { Calendar } from "@/components/ui/calendar";
+import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { toRupiah, hitungHari, bungaHarian } from "@/lib/utils";
+import { Trash2 } from "lucide-react";
 
 type Kredit = {
   id: string;
-  amount: number;
+  amount: bigint;
   tanggalPengambilan: string;
   tanggalPengembalian?: string | null;
 };
 
-type Props = {
+export default function KreditRow({
+  data,
+  onRefresh,
+}: {
   data: Kredit;
   onRefresh: () => void;
-};
+}) {
+  const [showCalendar, setShowCalendar] = useState(false);
 
-export default function KreditRow({ data, onRefresh }: Props) {
-  const tglAmbil = new Date(data.tanggalPengambilan);
-  const tglReturn = data.tanggalPengembalian
+  const pengambilan = new Date(data.tanggalPengambilan);
+  const pengembalian = data.tanggalPengembalian
     ? new Date(data.tanggalPengembalian)
-    : new Date();
-  const hari = hitungHari(tglAmbil, tglReturn);
-  const harian = bungaHarian(data.amount);
-  const bunga = harian * hari;
-  const totalKredit = data.amount + bunga;
-  const status = data.tanggalPengembalian ? "Lunas" : "Berjalan";
-  const berjalan = status === "Lunas" ? 0 : totalKredit;
-  const pengembalian = status === "Lunas" ? totalKredit : 0;
+    : null;
 
-  const handleReturn = async (date: Date) => {
+  const hari = hitungHari(pengambilan, pengembalian ?? new Date());
+  const bunga = bungaHarian(Number(data.amount));
+  const totalBunga = bunga * hari;
+  const totalKredit = Number(data.amount) + totalBunga;
+
+  const handleTanggalPengembalian = async (tanggal: Date | undefined) => {
+    setShowCalendar(false);
+    if (!tanggal) return;
+
     await fetch(`/api/kredit/${data.id}`, {
       method: "PUT",
-      body: JSON.stringify({ tanggalPengembalian: date }),
+      body: JSON.stringify({
+        amount: data.amount.toString(),
+        tanggalPengembalian: tanggal.toISOString(),
+      }),
     });
+
     onRefresh();
   };
 
   const handleDelete = async () => {
-    const confirm = window.confirm(
-      "Apakah Anda yakin ingin menghapus data ini?"
-    );
-    if (!confirm) return;
+    await fetch(`/api/kredit/${data.id}`, {
+      method: "DELETE",
+    });
 
-    await fetch(`/api/kredit/${data.id}`, { method: "DELETE" });
     onRefresh();
   };
 
+  const status = pengembalian ? "Lunas" : "Berjalan";
+
   return (
     <tr>
-      <td className="border px-2 py-1">{toRupiah(data.amount)}</td>
-      <td className="border px-2 py-1">{format(tglAmbil, "dd/MM/yyyy")}</td>
+      <td className="border px-2 py-1">{toRupiah(Number(data.amount))}</td>
       <td className="border px-2 py-1">
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button variant="outline" className="text-xs w-full">
-              {data.tanggalPengembalian
-                ? format(new Date(data.tanggalPengembalian), "dd/MM/yyyy")
-                : "dd/mm/yyyy"}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="bg-white p-0 rounded-md shadow-md">
+        {format(pengambilan, "dd MMM yyyy", { locale: id })}
+      </td>
+      <td className="border px-2 py-1 relative">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setShowCalendar((s) => !s)}
+        >
+          {pengembalian ? format(pengembalian, "dd/MM/yyyy") : "Pilih tanggal"}
+        </Button>
+
+        {showCalendar && (
+          <div className="absolute z-50 bg-white shadow border rounded mt-2">
             <Calendar
               mode="single"
-              selected={new Date()}
-              onSelect={(date) => date && handleReturn(date)}
+              selected={pengembalian ?? undefined}
+              onSelect={handleTanggalPengembalian}
+              defaultMonth={pengembalian ?? pengambilan}
             />
-          </PopoverContent>
-        </Popover>
+          </div>
+        )}
       </td>
-      <td className="border px-2 py-1">{hari} hari</td>
-      <td className="border px-2 py-1">{toRupiah(harian)}</td>
+      <td className="border px-2 py-1">{hari}</td>
       <td className="border px-2 py-1">{toRupiah(bunga)}</td>
-      <td className="border px-2 py-1">
-        <span
-          className={cn(
-            "px-2 py-0.5 rounded text-xs",
-            status === "Lunas"
-              ? "bg-green-100 text-green-600"
-              : "bg-red-100 text-red-600"
-          )}
-        >
-          {status}
-        </span>
-      </td>
+      <td className="border px-2 py-1">{toRupiah(totalBunga)}</td>
+      <td className="border px-2 py-1">{status}</td>
       <td className="border px-2 py-1">{toRupiah(totalKredit)}</td>
-      <td className="border px-2 py-1">{toRupiah(berjalan)}</td>
-      <td className="border px-2 py-1">{toRupiah(pengembalian)}</td>
+      <td className="border px-2 py-1 text-red-600">
+        {status === "Berjalan" ? toRupiah(totalKredit) : "Rp0"}
+      </td>
+      <td className="border px-2 py-1 text-green-600">
+        {status === "Lunas" ? toRupiah(totalKredit) : "-"}
+      </td>
       <td className="border px-2 py-1 text-center">
-        <Button variant="ghost" size="icon" onClick={handleDelete}>
-          <Trash size={16} className="text-red-500" />
-        </Button>
+        {/* Hapus dengan Modal */}
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <button className="text-red-600 hover:text-red-800">
+              <Trash2 size={16} />
+            </button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle className="flex items-center gap-2 text-red-600">
+                <Trash2 size={20} className="text-red-600" />
+                Hapus Data Kredit?
+              </AlertDialogTitle>
+              <AlertDialogDescription>
+                Tindakan ini akan menghapus data pengambilan kredit secara
+                permanen.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Batal</AlertDialogCancel>
+              <AlertDialogAction
+                className="bg-red-600 hover:bg-red-700 text-white"
+                onClick={handleDelete}
+              >
+                Hapus
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </td>
     </tr>
   );

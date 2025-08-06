@@ -12,7 +12,7 @@ import "react-date-range/dist/theme/default.css";
 
 type Kredit = {
   id: string;
-  amount: number;
+  amount: bigint;
   tanggalPengambilan: string;
   tanggalPengembalian?: string | null;
 };
@@ -23,7 +23,6 @@ export default function KreditTable() {
   const [refreshKey, setRefreshKey] = useState(0);
   const [showCalendar, setShowCalendar] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-
   const calendarRef = useRef<HTMLDivElement | null>(null);
 
   const refresh = () => {
@@ -95,13 +94,13 @@ export default function KreditTable() {
       new Date(d.tanggalPengambilan),
       d.tanggalPengembalian ? new Date(d.tanggalPengembalian) : new Date()
     );
-    return acc + d.amount + bungaHarian(d.amount) * hari;
+    return acc + Number(d.amount) + bungaHarian(Number(d.amount)) * hari;
   }, 0);
 
   const totalBerjalan = rows.reduce((acc, d) => {
     if (d.tanggalPengembalian) return acc;
     const hari = hitungHari(new Date(d.tanggalPengambilan), new Date());
-    return acc + d.amount + bungaHarian(d.amount) * hari;
+    return acc + Number(d.amount) + bungaHarian(Number(d.amount)) * hari;
   }, 0);
 
   const totalPengembalian = rows.reduce((acc, d) => {
@@ -110,7 +109,7 @@ export default function KreditTable() {
       new Date(d.tanggalPengambilan),
       new Date(d.tanggalPengembalian)
     );
-    return acc + d.amount + bungaHarian(d.amount) * hari;
+    return acc + Number(d.amount) + bungaHarian(Number(d.amount)) * hari;
   }, 0);
 
   return (
