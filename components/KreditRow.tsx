@@ -115,7 +115,7 @@ export default function KreditRow({
               <Trash2 size={16} />
             </button>
           </AlertDialogTrigger>
-          <AlertDialogContent>
+          <AlertDialogContent className="bg-white">
             <AlertDialogHeader>
               <AlertDialogTitle className="flex items-center gap-2 text-red-600">
                 <Trash2 size={20} className="text-red-600" />
