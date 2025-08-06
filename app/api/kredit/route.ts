@@ -9,6 +9,7 @@ export async function GET() {
   return NextResponse.json(data);
 }
 
+/*************  ✨ Windsurf Command 🌟  *************/
 export async function POST(req: Request) {
   const { amount, tanggalPengambilan } = await req.json();
   const data = await prisma.kredit.create({
@@ -19,3 +20,4 @@ export async function POST(req: Request) {
   });
   return NextResponse.json(data);
 }
+/*******  93c7c3ea-4ada-4d1c-b627-e6ef36f8cb19  *******/

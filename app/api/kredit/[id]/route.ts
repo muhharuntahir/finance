@@ -28,3 +28,23 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({ error: "Update failed" }, { status: 500 });
   }
 }
+
+// ✅ Tambahkan ini
+export async function DELETE(request: NextRequest) {
+  const id = request.nextUrl.pathname.split("/").pop();
+
+  if (!id) {
+    return NextResponse.json({ error: "Missing ID in URL" }, { status: 400 });
+  }
+
+  try {
+    const deleted = await prisma.kredit.delete({
+      where: { id },
+    });
+
+    return NextResponse.json({ message: "Deleted", deleted });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ error: "Delete failed" }, { status: 500 });
+  }
+}

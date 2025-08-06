@@ -9,7 +9,6 @@ import { Button } from "./ui/button";
 import { toRupiah, hitungHari, bungaHarian } from "@/lib/utils";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
-import "@/styles/date-range-custom.css";
 
 type Kredit = {
   id: string;
@@ -23,6 +22,7 @@ export default function KreditTable() {
   const [loading, setLoading] = useState<boolean>(true);
   const [refreshKey, setRefreshKey] = useState(0);
   const [showCalendar, setShowCalendar] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   const calendarRef = useRef<HTMLDivElement | null>(null);
 
@@ -38,6 +38,15 @@ export default function KreditTable() {
       .then(setData)
       .finally(() => setLoading(false));
   }, [refreshKey]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const [range, setRange] = useState<Range[]>([
     {
@@ -126,15 +135,15 @@ export default function KreditTable() {
             {showCalendar ? (
               <div
                 ref={calendarRef}
-                className="absolute right-0 mt-2 z-50 bg-white rounded-lg shadow-lg border p-4"
+                className="absolute right-0 mt-2 z-50 bg-white rounded-lg shadow-lg border p-2 sm:p-4 max-w-[90vw] overflow-x-auto"
               >
                 <DateRange
-                  className="bg-white"
+                  className="bg-white text-sm scale-[0.95] sm:scale-100"
                   editableDateInputs
                   onChange={(item) => setRange([item.selection])}
                   moveRangeOnFirstSelection={false}
                   ranges={range}
-                  months={2}
+                  months={isMobile ? 1 : 2}
                   direction="horizontal"
                   locale={id}
                 />
