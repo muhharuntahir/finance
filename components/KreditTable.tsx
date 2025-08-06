@@ -169,7 +169,7 @@ export default function KreditTable() {
 
       {/* Table */}
       <div className="w-full overflow-x-auto">
-        <table className="min-w-[800px] border text-sm text-left">
+        <table className="w-full border text-sm text-left table-auto">
           <thead className="bg-gray-100">
             <tr>
               <th className="border px-2 py-1">Pengambilan Kredit</th>
