@@ -9,7 +9,7 @@ import { Button } from "./ui/button";
 import { toRupiah, hitungHari, bungaHarian } from "@/lib/utils";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
-import "@/styles/date-range-custom.css"; // opsional: custom styling
+import "@/styles/date-range-custom.css";
 
 type Kredit = {
   id: string;
@@ -20,17 +20,23 @@ type Kredit = {
 
 export default function KreditTable() {
   const [data, setData] = useState<Kredit[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
   const [refreshKey, setRefreshKey] = useState(0);
   const [showCalendar, setShowCalendar] = useState(false);
 
   const calendarRef = useRef<HTMLDivElement | null>(null);
 
-  const refresh = () => setRefreshKey((k) => k + 1);
+  const refresh = () => {
+    setLoading(true);
+    setRefreshKey((k) => k + 1);
+  };
 
   useEffect(() => {
+    setLoading(true);
     fetch("/api/kredit")
       .then((res) => res.json())
-      .then(setData);
+      .then(setData)
+      .finally(() => setLoading(false));
   }, [refreshKey]);
 
   const [range, setRange] = useState<Range[]>([
@@ -44,7 +50,6 @@ export default function KreditTable() {
   const start = range[0].startDate;
   const end = range[0].endDate;
 
-  // Click outside handler for calendar
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -103,7 +108,7 @@ export default function KreditTable() {
     <>
       {/* Filter Controls */}
       <div className="flex justify-end mb-4 gap-4 relative">
-        <div className="flex flex-row items-end gap-2">
+        <div className="flex flex-col items-end gap-2">
           <div className="relative inline-block">
             <Button
               variant="outline"
@@ -172,23 +177,33 @@ export default function KreditTable() {
             </tr>
           </thead>
           <tbody>
-            {rows.map((item) => (
-              <KreditRow key={item.id} data={item} onRefresh={refresh} />
-            ))}
+            {loading ? (
+              <tr>
+                <td colSpan={11} className="text-center py-4 text-gray-500">
+                  Memuat data...
+                </td>
+              </tr>
+            ) : (
+              rows.map((item) => (
+                <KreditRow key={item.id} data={item} onRefresh={refresh} />
+              ))
+            )}
           </tbody>
-          <tfoot className="font-bold">
-            <tr>
-              <td colSpan={7}></td>
-              <td className="border px-2 py-1">{toRupiah(totalKredit)}</td>
-              <td className="border px-2 py-1 text-red-600">
-                {toRupiah(totalBerjalan)}
-              </td>
-              <td className="border px-2 py-1 text-green-600">
-                {toRupiah(totalPengembalian)}
-              </td>
-              <td></td>
-            </tr>
-          </tfoot>
+          {!loading && (
+            <tfoot className="font-bold">
+              <tr>
+                <td colSpan={7}></td>
+                <td className="border px-2 py-1">{toRupiah(totalKredit)}</td>
+                <td className="border px-2 py-1 text-red-600">
+                  {toRupiah(totalBerjalan)}
+                </td>
+                <td className="border px-2 py-1 text-green-600">
+                  {toRupiah(totalPengembalian)}
+                </td>
+                <td></td>
+              </tr>
+            </tfoot>
+          )}
         </table>
       </div>
     </>
