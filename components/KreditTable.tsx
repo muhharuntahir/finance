@@ -118,6 +118,20 @@ export default function KreditTable() {
       {/* Filter Controls */}
       <div className="flex justify-end mb-4 gap-4 relative">
         <div className="flex flex-row items-end gap-2">
+          <Button
+            className="text-sm text-red-700 bg-red-200 hover:bg-red-300 dark:bg-red-600 dark:hover:bg-red-500"
+            variant="secondary"
+            size="sm"
+            onClick={() => {
+              setRange([
+                { startDate: undefined, endDate: undefined, key: "selection" },
+              ]);
+              setShowCalendar(false);
+            }}
+          >
+            Reset Filter
+          </Button>
+
           <div className="relative inline-block">
             <Button
               variant="outline"
@@ -150,20 +164,6 @@ export default function KreditTable() {
               </div>
             ) : null}
           </div>
-
-          <Button
-            className="text-sm text-red-700 bg-red-200 hover:bg-red-300 dark:bg-red-600 dark:hover:bg-red-500"
-            variant="secondary"
-            size="sm"
-            onClick={() => {
-              setRange([
-                { startDate: undefined, endDate: undefined, key: "selection" },
-              ]);
-              setShowCalendar(false);
-            }}
-          >
-            Reset Filter
-          </Button>
         </div>
       </div>
 
