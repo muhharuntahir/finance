@@ -108,7 +108,7 @@ export default function KreditTable() {
     <>
       {/* Filter Controls */}
       <div className="flex justify-end mb-4 gap-4 relative">
-        <div className="flex flex-col items-end gap-2">
+        <div className="flex flex-row items-end gap-2">
           <div className="relative inline-block">
             <Button
               variant="outline"
