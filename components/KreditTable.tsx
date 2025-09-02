@@ -89,6 +89,12 @@ export default function KreditTable() {
       new Date(b.tanggalPengambilan).getTime()
   );
 
+  const totalBungaBerjalan = rows.reduce((acc, d) => {
+    if (d.tanggalPengembalian) return acc;
+    const hari = hitungHari(new Date(d.tanggalPengambilan), new Date());
+    return acc + bungaHarian(Number(d.amount)) * hari;
+  }, 0);
+
   const totalKredit = rows.reduce((acc, d) => {
     const hari = hitungHari(
       new Date(d.tanggalPengambilan),
@@ -200,7 +206,11 @@ export default function KreditTable() {
           {!loading && (
             <tfoot className="font-bold">
               <tr>
-                <td colSpan={7}></td>
+                <td colSpan={5}></td>
+                <td className="border px-2 py-1">
+                  {toRupiah(totalBungaBerjalan)}
+                </td>
+                <td colSpan={1}></td>
                 <td className="border px-2 py-1">{toRupiah(totalKredit)}</td>
                 <td className="border px-2 py-1 text-red-600">
                   {toRupiah(totalBerjalan)}

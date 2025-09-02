@@ -41,6 +41,9 @@ export default function KreditRow({
     : null;
 
   const hari = hitungHari(pengambilan, pengembalian ?? new Date());
+  // const rawHari = hitungHari(pengambilan, pengembalian ?? new Date());
+  // const hari = Math.max(rawHari, 1);
+
   const bunga = bungaHarian(Number(data.amount));
   const totalBunga = bunga * hari;
   const totalKredit = Number(data.amount) + totalBunga;
